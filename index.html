@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" id="favicon" type="image/jpg" href="img/DucDeLaValliere.png">
+    <title>Le théâtre féminin de la deuxième moitié du XVIIe siècle</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"
+        integrity="sha512-dfX5uYVXzyU8+KHqj8bjo7UkOdg18PaOtpa48djpNbZHwExddghZ+ZmzWT06R5v6NSk3ZUfsH6FNEDepLx9hPQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<style>
+    * {
+        /*font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;*/
+        font-family: 'Garamond', Times, serif;
+    }
+    
+    #image{margin-right:10px; margin-bottom:10px;}
+    td,
+    th {
+        border: 1px solid #fbdc81;
+        max-width: 300px;
+        background-color: #7E3000;/*5d1400;*/
+        border-radius: 5px;
+        color: #fbdc81;
+        word-wrap: break-word;
+    }
+    a{
+        color: #7E3000;
+    }
+    table{
+        margin-top:10px;
+        font-size:1.2em;
+    }
+    input,#credits{
+        font-size:1.2em;
+    }
+    .sortA,.sortD{
+        cursor:pointer;
+    }
+    .book{
+       width:300px;
+       display:inline-block;
+       text-align:center;
+       margin:1em;
+       padding-bottom:0.5em;
+       padding-top:1em;
+       vertical-align: top;
+       position:relative;
+       font-size:1.1em;
+       border-bottom:1px solid gray;
+       vertical-align:text-top;
+    }
+    .couverture{
+       height:250px;
+       border:1px solid lightgrey;
+       border-radius:4px;
+    }
+    .plume{
+       height:16px;
+       margin-bottom:-2px;       
+    }
+    .cf{
+       height:16px;
+       margin-bottom:-2px;       
+    }
+
+/* CC0-licensed code from https://loading.io/css/ */
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid black;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: black transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+    .loader{
+        position:fixed;
+        z-index:100;
+        padding:1em;
+        top:30%;
+        left:20%;
+        right:20%;
+        font-size:3em;
+        color:black;
+        background-color:rgba(255,255,255,0.7);
+        border-radius:1em;
+        text-align:center;
+    }
+
+</style>
+
+<body>
+    <img src="img/DucDeLaValliere.jpg" title="Source : Reliure aux armoiries du duc de La Vallière" id="image" style="float:left;width:130px">
+    <h1 id="title">Le théâtre féminin de la deuxième moitié du XVIIe siècle</h1>
+    <p id="credits"></p>
+    <div id="filters"><h2>Filtres</h2><p>Les champs ci-dessous sont des filtres : seules sont affichées les lignes qui contiennent, pour le ou les champs que vous avez complétés, une valeur qui inclut ce que vous avez écrit dans le champ (en ignorant la casse).</p><p id="permalink"></p></div>
+    <div class="loader"><!-- CC0-licensed code from https://loading.io/css/ --><div class="lds-ring"><div></div><div></div><div></div><div></div></div><br><em>Chargement des données en cours, merci d'attendre quelques secondes...</em></div>
+    <h2>Corpus</h2>
+    <table>
+        <tr id="column-heading"></tr>
+    </table>
+    <div id="biblio"></div>
+    <script>
+
+        var infos;
+        var items;
+        
+        // Function to fill in the table
+        function fillInTable(){
+            items.forEach(i => {
+                console.log(items)
+                            /*
+                            // Create a new row in the table for each item
+                            let tr = document.createElement("tr");
+                            infos["fields"].forEach(f => {
+                                // Create a new cell in the row for each value
+                                let td = document.createElement("td");
+                                let text = document.createTextNode(i[f]);
+                                // If the value looks like a link, add a link
+                                if (i[f].substring(0, 4) == "http") {
+                                    let link = document.createElement("a");
+                                    link.appendChild(text);
+                                    link.setAttribute("href", i[f]);
+                                    link.setAttribute("target", "_blank");
+                                    td.appendChild(link);
+                                } else {
+                                    td.appendChild(text);
+                                }
+                                tr.appendChild(td);
+                            !})
+                            */
+                            let book = document.createElement("div");
+                            book.setAttribute("class","book");
+                            
+                            var infosUrl = "🗎";//+ " - " + i["Lieu de conservation"];
+                            
+                            // Autrice
+                            let autrice = i["Autrice"];
+                            /*
+                            if(i["Wikidata comp. 1"].length>0 && i["Wikidata comp. 1"] != "#N/A"){
+                               autrice = "<a target=\"_blank\" href=\"https://wikidata.org/entity/" + i["Wikidata comp. 1"] + "\">" + i["Compositeur ou compositrice"] + "</a>";
+                               
+                            }
+                            */
+                            
+                            /*
+                            console.log(i["Wikidata trad. 2"]);
+                            if(i["Wikidata trad. 2"] != ""){
+                               autrice += ", <a target=\"_blank\" href=\"https://wikidata.org/entity/" + i["Wikidata trad. 2"] + "\">" + i["Traducteur ou traductrice 2"] + "</a>";
+                               
+                            }
+                            */
+                            
+                            
+                            // Image de couverture
+                            let tooltip="";
+                            if(i["Lieu de conservation"].length > 0){
+                                tooltip = i["Lieu de conservation"] + ", " + i["Cote"] ;
+                            }
+
+                            let image = "covers/white.jpg"
+                            if(i["Lien catalogue"].length > 0){
+                                if(i["Image de l'exemplaire"].length > 0){
+                                    let pdf = "pdf/"+i["Image de l'exemplaire"].replace(".jpeg",".pdf").replace("covers/","");
+                                    if(i["Gallica"].length == 0){
+                                        if(pdf.split("@").length > 1){
+                                            pdf = pdf.split("@")[0]+".pdf#page="+pdf.split("@p")[1].split(".")[0];
+                                        }
+                                    } else {
+                                        pdf = i["Gallica"];
+                                        //i["Image de l'exemplaire"] = i["Gallica"]+".medres";
+                                        i["Image de l'exemplaire"] = i["Gallica"].replace("https://gallica.bnf.fr/ark:/12148/","covers/gallica-").replace("/f","_f")+".jpeg";
+                                    }
+                                    
+                                    image = '<a title="Lien vers l\'ouvrage" target="_blank" href="' + pdf + '"><img class="couverture" alt="page de titre" src="' + i["Image de l'exemplaire"] + '" title="'+ tooltip +'"></a><br>';
+                                } else {
+                                    image = '<a title="Lien vers l\'ouvrage" target="_blank" href="' + i["Lien catalogue"].split(" ")[0] + '"><img class="couverture" alt="page de titre" src="' + i["Image de l'exemplaire"] + '" title="'+ tooltip +'"></a><br>';
+                                }
+                            } else {
+                                image = '<img class="couverture" alt="page de titre" src="' + i["Image de l'exemplaire"] + '" title="'+ tooltip +'"><br>';
+                            }
+                            
+                            // Titre
+                            let titre = "<em>" + i["Titre"] + "</em>";
+                            if(i["Lien catalogue"].length > 0){
+                               titre = '<em><a title="Lien vers la notice de l\'ouvrage" target="_blank" href="' + i["Lien catalogue"].split(" ")[0] + '">' + i["Titre"] + '</a></em>';
+                            }
+
+                            // Reliure
+                            let reliure = "";
+                            if(i["Reliure"].length > 0){
+                                reliure = ', ' + i["Reliure"];
+                            }
+
+                            // Format
+                            let format = "";
+                            if(i["Format"].length > 0){
+                                format = ', ' + i["Format"];
+                            }
+
+                            // Description physique
+                            let description = "";
+                            if(i["Publication"].length > 0){
+                                description = ', ' + i["Publication"];
+                            }
+
+                            // Possesseur
+                            let possesseur = "";
+                            if(i["Possesseur identifié ou supposé"].length > 0){
+                                possesseur = i["Possesseur identifié ou supposé"]
+                                + "<br>Marques de provenance : " + i["Marques de provenance"];
+                            }
+
+                            /*
+                            if(i["Wikidata édition"] != ""){
+                               titre = '<a target="_blank" href="https://wikidata.org/entity/' + i["Wikidata édition"] + '">' + i["Titre"] + '</a>';
+                            } else {
+                               if(i["Wikidata œuvre"] != ""){
+                                  titre = '<a target="_blank" href="https://wikidata.org/entity/' + i["Wikidata œuvre"] + '">' + i["Titre"] + '</a>';
+                               } else {
+                                   titre = i["Titre"];
+                               }
+                            }
+                            */
+                            
+                            
+                            // Texte
+                            /*
+                            let texte = "";
+                            if(i["URL texte"].length > 0){
+                                texte = ', <a title="Lien vers le texte intégral de l\'ouvrage" target="_blank" href="' + i["URL texte"].split(" ")[0] + '">' + i["Source texte"] + '</a>';
+                            }
+                            */
+
+                            
+                            // Achat
+                            let achat = "";
+                            
+                            book.innerHTML = (image + autrice 
+                            + ", <strong>" + titre.replaceAll(" ?","&nbsp;?").replaceAll(" !","&nbsp;!").replaceAll(" ;","&nbsp;;") + "</strong>" 
+                            + description + format + reliure
+                            + ", " + tooltip
+                            + ", " + i["Date"] 
+                            + "<br><details><summary>Nature de l'exemplaire</summary>"+ i["Nature de l'exemplaire"] +"</details>"
+                            + "<details><summary>Possesseur identifié ou supposé</summary>"+ possesseur +"</details>"
+                            ).replaceAll(" :","&nbsp;:").replaceAll(" ;","&nbsp;;").replaceAll(", , ",", ").replaceAll(", .",".").replaceAll(".,",",")
+                            ;
+                            // Update the table by adding the new row
+                            document.querySelector("#biblio").appendChild(book);
+                        })
+        } 
+        
+        // Function to filter the rows
+        function filterRows(e){
+            let rowNumber = 0;
+            let filterValues = [];
+            let fieldNumber = 0;
+            let url = location.href.split("?")[0];
+            let addedFilter = 0;
+            infos["fields"].forEach(f => {
+                filterValues[fieldNumber] = document.querySelector("#filter" + fieldNumber).value.toLowerCase();
+                if(document.querySelector("#filter" + fieldNumber).value != ""){
+                   if(addedFilter > 0){
+                      url += "&";
+                   } else {
+                      url = "?";
+                   }
+                   addedFilter++;
+                   url += "filter" + fieldNumber + "=" + encodeURI(document.querySelector("#filter" + fieldNumber).value);
+                }
+                fieldNumber += 1;
+            })
+            document.querySelector("#permalink").innerHTML = '<a href="' + url.replace("&","&amp;") +   '">&#x1F517; permalien</a>';
+            
+            
+            //!!!document.querySelectorAll("table tr").forEach(row => {
+            document.querySelectorAll("div.book").forEach(row => {
+                let display = true;
+                let fieldNumber = 0;
+                if (rowNumber > -1) {
+                    infos["fields"].forEach(f => {
+                        console.log(f)
+                        if ((items[rowNumber][f]).toLowerCase().indexOf(filterValues[fieldNumber]) < 0) {
+                            display = false;
+                        }
+                        fieldNumber += 1
+                    })
+                    if (display) {
+                        row.style.display = "inline-block"
+                    } else {
+                        row.style.display = "none";
+                    }
+                }
+                rowNumber += 1;
+            })
+        }
+        
+        // Function to sort the rows
+        function sortRows(e){
+           let table = document.querySelector("table");
+           let firstRow = document.querySelector("table tr:nth-child(1)");
+           let language = "fr";
+           const collator = new Intl.Collator(language); 
+
+           // Get the number of the clicked column
+           let chosenColumnNumber = parseInt(e.target.id.split("-")[1]);
+
+           // Define the order in which the rows will be sorted
+           var polarity = -1;
+           if(e.target.classList[0]=="sortA"){
+               polarity = 1;
+           }
+           
+           // Sort the rows
+           items.sort(function(a,b){
+               let result = collator.compare(a[infos["fields"][chosenColumnNumber]], b[infos["fields"][chosenColumnNumber]])*polarity;
+               return result
+           })
+           
+           table.innerHTML = "";
+           document.querySelector("#biblio").innerHTML = "";
+           table.append(firstRow);
+           fillInTable();           
+        }
+
+        // Get the id of the data to display
+        /*
+        let url = document.location.href;
+        let id = "";
+        let vars = (url + "").split("?")[1].split("&");
+        vars.forEach(l => {
+            let infos = l.split("=");
+            if (infos[0] == "id") { id = infos[1]; }
+        })
+        */
+        let id = "exemplaires";
+        
+        try{
+        // Load the JSON file with information about the data
+        fetch('infos-' + id + '.json').then(function (response) {
+            response.json().then(function (data) {
+                infos = data;
+                // Load image in loader
+                /*
+                if("image" in infos){
+                    let image = document.createElement("img");
+                    image.setAttribute("src", infos["image"][1]);
+                    document.querySelector(".rotate").innerHTML = ""; 
+                    document.querySelector(".rotate").appendChild(image);                    
+                }
+                */
+                
+                // Load column headings
+                let fieldNumber = 0;
+                infos["fields"].forEach(f => {
+                    // Create a th tag for the column heading
+                    let th = document.createElement("th");
+                    let text = document.createTextNode(f+" ");
+                    th.appendChild(text);
+                    let sortA = document.createElement("span");
+                    let sortD = document.createElement("span");
+                    sortA.appendChild(document.createTextNode("▲"));
+                    sortD.appendChild(document.createTextNode("▼"));
+                    sortA.id = "sortA-"+fieldNumber;
+                    sortD.id = "sortD-"+fieldNumber;
+                    sortA.classList.add("sortA");
+                    sortD.classList.add("sortD");
+                    th.appendChild(sortA);
+                    th.appendChild(sortD);
+                    document.querySelector("#column-heading").appendChild(th);
+
+                    // Create a filter tag for the column heading
+                    let input = document.createElement("input");
+                    input.setAttribute("type", "text");
+                    input.setAttribute("placeHolder", f);
+                    input.setAttribute("id", "filter" + fieldNumber);
+                    document.querySelector("#filters").appendChild(input);
+                    fieldNumber += 1;
+                })
+                
+                // Make columns sortable
+                document.querySelectorAll(".sortA,.sortD").forEach(el => {el.addEventListener("click", sortRows)});
+
+                // Load other information into the webpage
+                Object.keys(infos).forEach(o => {
+                    if (document.querySelector("#" + o) != null) {
+                        if (infos[o].length == 1){
+                            document.querySelector("#" + o).innerHTML = infos[o][0];
+                        } else {
+                            let attributeNumber = 0;
+                            while(attributeNumber*2+1 < infos[o].length){
+                                document.querySelector("#" + o).setAttribute(infos[o][attributeNumber*2],infos[o][attributeNumber*2+1]);
+                                attributeNumber += 1;
+                            }
+                        }
+                    }
+                })
+                document.querySelector("title").innerHTML = document.querySelector("#title").innerText;
+                //document.querySelector("#favicon").setAttribute("href", document.querySelector("#image").getAttribute("src"));
+
+
+                console.log(infos.url)
+                // Load the data into the table
+                Papa.parse(infos.url, {
+                    download: true,
+                    header: true,
+                    complete: function (results) {
+                        items = []
+                        results.data.forEach(i => {
+                              items.push(i);
+                        })
+                        // fill in the table
+                        fillInTable();
+                        
+                        document.querySelector(".loader").style.display = "none";
+
+                        // Make the filters active
+                        let fieldNumber = 0;
+                        infos["fields"].forEach(f => {
+                            document.querySelector("#filter" + fieldNumber).addEventListener("keyup", filterRows);
+                            document.querySelector("#filter" + fieldNumber).addEventListener("change", filterRows);
+                            fieldNumber += 1;
+                        })
+                        
+                        // Load data from the URL for the filters
+                        let url = location.href.split("?");
+                        if(url.length>1){
+                           let parameters = url[1].split("&");
+                           parameters.forEach(parameter => {
+                              let param = parameter.split("=");
+                              if(param[0].substring(0,6) == "filter"){
+                                 document.querySelector("#" + param[0]).value = decodeURI(param[1]);
+                              }
+                           })
+                           filterRows();
+                        }
+                        
+
+                    }
+                });
+            }).catch(e => {
+                document.querySelector("#filters").innerHTML = "<p style=\"font-size:1.5em\">Identifiant de la base de données non trouvé. L'URL de ce site devrait se terminer par <em>?id=identifiant_de_la_base_de_données</em>, voir la documentation de <a href=\"https://github.com/PhilippeGambette/web-gsdb\">web-gsdb</a> pour plus d'informations.</p>"
+                document.querySelector(".loader").style.display = "none";
+            })
+        })
+        } catch(error){
+            console.log(error)
+        }
+
+    </script>
+    <footer>
+    <hr>
+    <h3>À propos</h3>
+    Cette page a été créée dans le cadre du <a href="https://theses.fr/s344731">doctorat de Caroline Mogenet</a>.<br><br>
+    Directrice éditoriale&nbsp;: <a href="https://www.dypac.uvsq.fr/mme-caroline-mogenet-1">Caroline Mogenet</a>.<br>
+    Illustration&nbsp;: <em>Reliure aux armoiries du duc de La Vallière</em>.<br>
+    Code de ce site dérivé de <a href="https://github.com/citedesdames/theatre1618">celui-ci</a>, mis à disposition sur GitHub sous licence libre MIT.
+    </footer>
+</body>
+</html>
