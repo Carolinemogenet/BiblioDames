@@ -399,7 +399,9 @@
                     sortD.classList.add("sortD");
                     th.appendChild(sortA);
                     th.appendChild(sortD);
-                    document.querySelector("#column-heading").appendChild(th);
+                    if(infos["sorted"].includes(f)){
+                        document.querySelector("#column-heading").appendChild(th);
+                    }
 
                     // Create a filter tag for the column heading
                     let input = document.createElement("input");
