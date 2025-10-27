@@ -504,18 +504,25 @@
         d’investissements d’avenir intégré à France 2030, portant la référence 
         <strong>ANR-17-EURE-0021 École Universitaire de Recherche Paris Seine Humanités, Création, Patrimoine - Fondation des Sciences du Patrimoine</strong>.
 </p>
-        
+
+<p style="margin-top: 1.2em; font-family: 'Garamond', Times, serif; font-size: 1em; color: black;">
+    Pour citer cette page : Caroline Mogenet, 
+    <em>Bibliodames. Le théâtre de femmes (1650-1700) dans les collections de la BnF</em>, 
+    consulté le <span id="date-consultation"></span>.
+</p>
+
+<script>
+    (function() {
+        const dateCitation = new Date();
+        const optionsCitation = { day: 'numeric', month: 'long', year: 'numeric' };
+        document.getElementById('date-consultation').textContent =
+            dateCitation.toLocaleDateString('fr-FR', optionsCitation);
+    })();
+</script>
 
     Illustration&nbsp;: <em>Reliure aux armoiries du Duc de La Vallière, exemplaire 4-BL-3744 (Louise-Geneviève de Sainctonge, Didon, Strasbourg, Michel Storck, 1701), conservé à la Bibliothèque de l'Arsenal</em>.<br>
     Code de ce site dérivé de <a href="https://github.com/citedesdames/theatre1618">celui-ci</a>, mis à disposition sur GitHub sous licence libre MIT.
 <p>
-
-     <script>
-        // Script pour insérer automatiquement la date du jour dans la citation
-        const date = new Date();
-        const options = { day: 'numeric', month: 'long', year: 'numeric' };
-        document.getElementById('date-consultation').textContent = date.toLocaleDateString('fr-FR', options);
-    </script>
         
 <div id="partner-logos" style="margin-top:1em;">
         <img src="img/logo-dypac-2020.jpg" alt="Université de Versailles Saint-Quentin-en-Yvelines" style="height:50px; margin-right:1em;">
